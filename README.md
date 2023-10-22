@@ -51,3 +51,5 @@ nativas, jpql, spring).
 1 - Implementação da foto para a tabela User. (0,5 pts)
 2 - Implementação do comentário relacionado a um usuário que o fez. (0,5). 
 3 - Deixar somente quem me segue comentar (0.5)
+
+![DiagramaUML](https://github.com/nailluhj/TrabalhoFinalAPI/assets/142450314/caebbb18-64f0-44b3-bc49-01734dcbf7e8)
