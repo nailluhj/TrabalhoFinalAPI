@@ -2,8 +2,10 @@ package org.serratec.projetofinal.ApiRestful.DTO;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.serratec.projetofinal.ApiRestful.model.Relacionamento;
 import org.serratec.projetofinal.ApiRestful.model.Usuario;
 
 public class UsuarioDTO implements Serializable {
@@ -14,7 +16,7 @@ public class UsuarioDTO implements Serializable {
     private String sobrenome;
     private String email;
     private LocalDate dataNascimento;
-    private List<RelacionamentoDTO> relacionamennto;
+    private List<RelacionamentoDTO> relacionamentos;
 
     public UsuarioDTO() {
     }
@@ -25,6 +27,16 @@ public class UsuarioDTO implements Serializable {
         this.sobrenome = usuario.getSobrenome();
         this.email = usuario.getEmail();
         this.dataNascimento = usuario.getDataNascimento();
+        relacionamentos = new ArrayList<>();
+        
+        for (Relacionamento relacionamento : usuario.getRelacionamento()) {
+        	UsuarioDTO target = relacionamento.getUsuarioDTO();
+        	
+        	if (target == null)
+        		continue;
+        	
+        	relacionamentos.addAll(target.getRelacionamentos());
+        }
     }
 
     public Long getId() {
@@ -67,17 +79,15 @@ public class UsuarioDTO implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
-    public List<RelacionamentoDTO> getRelacionamennto() {
-        return relacionamennto;
+    public List<RelacionamentoDTO> getRelacionamentos() {
+        return relacionamentos;
     }
 
-    public void setRelacionamennto(List<RelacionamentoDTO> relacionamennto) {
-        this.relacionamennto = relacionamennto;
+    public void setRelacionamentos(List<RelacionamentoDTO> relacionamennto) {
+        this.relacionamentos = relacionamennto;
     }
 
 	public void setUrlImagem(String string) {
 			
 	}
-
-
 }

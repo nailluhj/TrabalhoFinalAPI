@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -47,8 +48,9 @@ public class Usuario {
 	@Column
 	private LocalDate dataNascimento;
 	
+	@NotNull
 	@OneToMany(mappedBy = "id.usuarioseguido", cascade = CascadeType.ALL)
-	private List<Relacionamento> relacionamento = new ArrayList<>();
+	private List<Relacionamento> relacionamentos = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -99,11 +101,18 @@ public class Usuario {
 	}
 
 	public List<Relacionamento> getRelacionamento() {
-		return relacionamento;
+		return relacionamentos;
+	}
+	
+	public Relacionamento getRelacionamentoById(long id) {
+		return relacionamentos.isEmpty() ? null : relacionamentos.stream().filter(found -> found.getId().equals(id)).findFirst().get();
 	}
 
 	public void setRelacionamento(List<Relacionamento> relacionamento) {
-		this.relacionamento = relacionamento;
+		this.relacionamentos = relacionamento;
 	}
-
+	
+	public void addfriend(Relacionamento r) {
+		relacionamentos.add(r);
+	}
 }

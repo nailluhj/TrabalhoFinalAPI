@@ -22,12 +22,7 @@ public class Relacionamento {
 	@Column(name = "foto_url")
     private String fotoUrl; 
 
-	public Relacionamento() {
-		
-	}
-
 	public Relacionamento(Usuario usuario, Usuario usuarioseguido) {
-		
 		this.id.setUsuario(usuario);
 		this.id.setUsuarioseguido(usuarioseguido);
 		this.dataInicio = LocalDate.now();
@@ -54,11 +49,11 @@ public class Relacionamento {
 	}
 
 	public void setFotoUrl(String fotoUrl) {
-	        this.fotoUrl = fotoUrl;
+	       this.fotoUrl = fotoUrl;
 	}
 
 	public UsuarioDTO getUsuarioDTO() {
-		
+	
 		return null;
 	}
 }   

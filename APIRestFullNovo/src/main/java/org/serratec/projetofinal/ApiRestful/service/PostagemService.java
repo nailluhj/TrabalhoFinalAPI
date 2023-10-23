@@ -27,9 +27,7 @@ public class PostagemService {
 
     public List<PostagemDTO> listarPostagens() {
         List<Postagem> postagens = postagemRepository.findAll();
-        return postagens.stream()
-            .map(this::postagemParaPostagemDTO)
-            .collect(Collectors.toList());
+        return postagens.stream().map(this::postagemParaPostagemDTO).collect(Collectors.toList());
     }
 
     public PostagemDTO buscarPostagemPorId(Long id) {
@@ -41,40 +39,18 @@ public class PostagemService {
         return null;
     }
 
-    public PostagemDTO inserirPostagem(PostagemDTO postagemDTO) {
-        Postagem postagem = new Postagem();
-        postagem.setConteudo(postagemDTO.getConteudo());
-        
-        postagem = postagemRepository.save(postagem);
-        return postagemParaPostagemDTO(postagem);
+    public PostagemDTO inserirPostagem(Postagem postagem) {
+        PostagemDTO postagemDTO = new PostagemDTO();
+        postagemDTO.setConteudo(postagem.getConteudo());
+        postagemDTO.setDataCriacao(postagem.getDataCriacao());
+        postagemRepository.save(postagem);
+        return postagemDTO;
     }
 
-    public PostagemDTO salvarPostagem(Long id, PostagemDTO postagemDTO) {
-        Optional<Usuario> usuarioOpt = usuarioService.findUsuarioById(id);
-        
-        if (usuarioOpt.isPresent() && postagemDTO != null) {
-            if (postagemDTO.getId() == null) {
-                Postagem postagem = new Postagem();
-                postagem.setConteudo(postagemDTO.getConteudo());
-                postagem.setUsuario(usuarioOpt.get());
-                
-                postagem = postagemRepository.save(postagem);
-                return postagemParaPostagemDTO(postagem);
-            } else {
-                Optional<Postagem> postagemOpt = postagemRepository.findById(postagemDTO.getId());
-                if (postagemOpt.isPresent()) {
-                    Postagem postagem = postagemOpt.get();
-                    postagem.setConteudo(postagemDTO.getConteudo());
-                    
-                    postagem = postagemRepository.save(postagem);
-                    return postagemParaPostagemDTO(postagem);
-                }
-            }
-        }
-        
-        return null;
+    public void excluirPostagem(Long id) {
+        postagemRepository.deleteById(id);
     }
- 
+
     private PostagemDTO postagemParaPostagemDTO(Postagem postagem) {
         PostagemDTO postagemDTO = new PostagemDTO();
         postagemDTO.setId(postagem.getId());
@@ -83,15 +59,13 @@ public class PostagemService {
 
         if (postagem.getUsuario() != null) {
             Long userId = postagem.getUsuario().getId();
-            UsuarioDTO usuarioDTO = usuarioService.findById(userId); 
+            UsuarioDTO usuarioDTO = usuarioService.findById(userId);
             postagemDTO.setUsuario(usuarioDTO);
         }
 
-        List<ComentarioDTO> comentario = comentarioService.listarComentariosPorPostagem(postagem.getId());
-        postagemDTO.setComentario(comentario);
+        List<ComentarioDTO> comentarios = comentarioService.listarComentariosPorPostagem(postagem.getId());
+        postagemDTO.setComentarios(comentarios);
 
         return postagemDTO;
     }
-    
 }
-
